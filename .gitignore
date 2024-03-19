@@ -191,6 +191,6 @@ py10/
 gsemo.cpp
 
 2022-SO-BO-main
-.conda_environment
+.deploy/conda_environment
 concepts
 tests/python/nevergrad.benchmark.Experiment/

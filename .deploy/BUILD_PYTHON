@@ -1,0 +1,11 @@
+#!/usr/bin/env fish
+
+true
+and conda activate base
+and rm -rf .deploy/conda_environment/
+and rm -rf build/
+and conda env create --prefix .deploy/conda_environment/ --file .deploy/conda.yaml
+and conda activate .deploy/conda_environment/
+and pip install --requirement .deploy/pip.txt
+and pip install . -vvv
+# and pip install -e . -vvv
