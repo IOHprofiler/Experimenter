@@ -33,7 +33,9 @@ std::string vec_to_string(const std::vector<int>& vec) {
 }
 
 void run_test_case(int instance, int n_variables, double distortion_probability, double distortion, const std::vector<int>& x) {
-    ioh::problem::DistortedOnemax landscape(1, n_variables, distortion_probability, distortion);
+
+    const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::distorted_onemax::DistortedOnemaxInherited>::instance();
+    auto landscape = problem_factory.create(999'999, 1, n_variables, distortion, distortion_probability);
 
     for (int i = 0; i < 5; ++i) {
         std::vector<int> test_vector = x;
@@ -51,7 +53,7 @@ void run_test_case(int instance, int n_variables, double distortion_probability,
             }
         }
 
-        auto y = landscape(test_vector);
+        auto y = (*landscape)(test_vector);
         LOG("Evaluation " << (i + 1) << ": Instance: " << instance << ", n_variables: " << n_variables
             << ", distortion_probability: " << distortion_probability
             << ", distortion: " << distortion);
