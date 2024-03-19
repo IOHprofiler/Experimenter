@@ -1155,6 +1155,66 @@ void define_cec2022_problems(py::module &m)
         .def(py::init<int, int>(), py::arg("instance"), py::arg("n_variables"));
 }
 
+void define_distorted_onemax(py::module &m)
+{
+    py::class_<DistortedOnemax, IntegerSingleObjective, std::shared_ptr<DistortedOnemax>>
+    (
+        m,
+        "DistortedOnemax",
+        R"pbdoc(
+            Dynamic BinVal. Details: https://link.springer.com/article/10.1007/s42979-022-01203-z
+        )pbdoc"
+    )
+    .def_static(
+        "create",
+        [](const std::string &name, int iid, int dim, double distortion_probability, double distortion) {
+            return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().create(name, iid, dim, distortion_probability, distortion);
+        },
+        py::arg("problem_name"), py::arg("instance_id"), py::arg("n_variables"), py::arg("distortion_probability"), py::arg("distortion"),
+        R"pbdoc(
+            Create a problem instance
+
+            Parameters
+            ----------
+                problem_name: str
+                    a string indicating the problem name.
+                instance_id: int
+                    an integer identifier of the problem instance
+                n_variables: int
+                    the n_variablesality of the search space
+        )pbdoc"
+    )
+    .def_static(
+        "create",
+        [](int id, int iid, int dim, double distortion_probability, double distortion) {
+            return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().create(id, iid, dim, distortion_probability, distortion);
+        },
+        py::arg("problem_id"), py::arg("instance_id"), py::arg("n_variables"), py::arg("distortion_probability"), py::arg("distortion"),
+        R"pbdoc(
+            Create a problem instance
+
+            Parameters
+            ----------
+                problem_id: int
+                    a number indicating the problem numeric identifier.
+                instance_id: int
+                    an integer identifier of the problem instance
+                n_variables: int
+                    the dimensionality of the search space
+        )pbdoc"
+    )
+    .def_property_readonly_static(
+        "problems", [](py::object) { return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().map(); },
+        "All registered problems"
+    )
+    .def(py::init<int, int, double, double>(),
+        py::arg("instance_id"),
+        py::arg("n_variables"),
+        py::arg("distortion_probability"),
+        py::arg("distortion")
+    );
+}
+
 void define_problem_bases(py::module &m)
 {
     define_base_class<RealSingleObjective, double>(m, "RealSingleObjective");

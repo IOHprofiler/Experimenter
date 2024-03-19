@@ -6,6 +6,11 @@ and rm -rf .deploy/conda_environment/
 and rm -rf build/
 and conda env create --prefix .deploy/conda_environment/ --file .deploy/conda.yaml
 and conda activate .deploy/conda_environment/
+
+
+# Set environment variables to use GCC 9 for compilation
+and set -x CC gcc-9
+and set -x CXX g++-9
+
 and pip install --requirement .deploy/pip.txt
 and pip install . -vvv
-# and pip install -e . -vvv
