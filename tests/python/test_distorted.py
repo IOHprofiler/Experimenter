@@ -4,10 +4,9 @@ if sys.path[0] == '': sys.path.append(sys.path.pop(0))
 
 import ioh
 
-print('DistortedOnemax ===============================================================')
+print('  DistortedOnemax:')
 
 f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
-print(ioh.problem.IntegerSingleObjective.problems)
 f.set_distortion(1000)
 f.set_distortion_probability(0.9)
 x = [0, 1, 1, 1, 0]
