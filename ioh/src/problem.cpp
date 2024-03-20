@@ -1157,7 +1157,7 @@ void define_cec2022_problems(py::module &m)
 
 void define_distorted_onemax(py::module &m)
 {
-    py::class_<DistortedOnemax, IntegerSingleObjective, std::shared_ptr<DistortedOnemax>>
+    py::class_<ioh::problem::distorted_onemax::DistortedOnemax, IntegerSingleObjective, std::shared_ptr<ioh::problem::distorted_onemax::DistortedOnemax>>
     (
         m,
         "DistortedOnemax",
@@ -1167,10 +1167,10 @@ void define_distorted_onemax(py::module &m)
     )
     .def_static(
         "create",
-        [](const std::string &name, int iid, int dim, double distortion_probability, double distortion) {
-            return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().create(name, iid, dim, distortion_probability, distortion);
+        [](const std::string &name, int iid, int dim) {
+            return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().create(name, iid, dim);
         },
-        py::arg("problem_name"), py::arg("instance_id"), py::arg("n_variables"), py::arg("distortion_probability"), py::arg("distortion"),
+        py::arg("problem_name"), py::arg("instance_id"), py::arg("n_variables"),
         R"pbdoc(
             Create a problem instance
 
@@ -1186,10 +1186,10 @@ void define_distorted_onemax(py::module &m)
     )
     .def_static(
         "create",
-        [](int id, int iid, int dim, double distortion_probability, double distortion) {
-            return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().create(id, iid, dim, distortion_probability, distortion);
+        [](int id, int iid, int dim) {
+            return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().create(id, iid, dim);
         },
-        py::arg("problem_id"), py::arg("instance_id"), py::arg("n_variables"), py::arg("distortion_probability"), py::arg("distortion"),
+        py::arg("problem_id"), py::arg("instance_id"), py::arg("n_variables"),
         R"pbdoc(
             Create a problem instance
 
@@ -1204,15 +1204,16 @@ void define_distorted_onemax(py::module &m)
         )pbdoc"
     )
     .def_property_readonly_static(
-        "problems", [](py::object) { return ioh::common::Factory<DistortedOnemax, int, int, double, double>::instance().map(); },
+        "problems", [](py::object) { return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().map(); },
         "All registered problems"
     )
-    .def(py::init<int, int, double, double>(),
+    .def(
+        py::init<int, int>(),
         py::arg("instance_id"),
-        py::arg("n_variables"),
-        py::arg("distortion_probability"),
-        py::arg("distortion")
-    );
+        py::arg("n_variables")
+    )
+    .def("set_distortion", &ioh::problem::distorted_onemax::DistortedOnemaxInherited::set_distortion, py::arg("distortion"), "set the distortion")
+    .def("set_distortion_probability", &ioh::problem::distorted_onemax::DistortedOnemaxInherited::set_distortion_probability, py::arg("distortion_probability"), "set the distortion_probability");
 }
 
 void define_problem_bases(py::module &m)

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cassert> // Include the assert header
-
 #include "distorted_onemax_inherited.hpp"
 #include "ioh/problem/single.hpp"
 #include "ioh/problem/transformation.hpp"
@@ -12,6 +10,11 @@ namespace ioh::problem::distorted_onemax
     class DistortedOnemax final : public DistortedOnemaxInheritedProblem<DistortedOnemax>
     {
     protected:
+
+        double distortion_;
+        double distortion_probability_;
+        std::bernoulli_distribution distortion_distribution_;  // Bernoulli distribution for distortion
+        std::mt19937 rng_;  // Random number generator
 
         struct VectorHash {
             size_t operator()(const std::vector<int>& v) const {
@@ -49,13 +52,31 @@ namespace ioh::problem::distorted_onemax
         }
 
     public:
-        DistortedOnemax(const int instance, const int n_variables, const double distortion, const double distortion_probability)
-        : DistortedOnemaxInheritedProblem(instance, n_variables, distortion, distortion_probability) {
-            assert(distortion_probability_ >= 0.0 && distortion_probability_ <= 1.0 && "Distortion probability must be between 0 and 1");
+
+        DistortedOnemax(const int instance, const int n_variables) :
+            DistortedOnemaxInheritedProblem(instance, n_variables),
+            distortion_(0),
+            distortion_probability_(0),
+            distortion_distribution_(0)
+        {
+            std::random_device rd;
+            rng_ = std::mt19937(rd());
+
             optimum_.x = std::vector<int>(n_variables,1);
-            optimum_.y = evaluate(optimum_.x);
+            optimum_.y = std::accumulate(optimum_.x.begin(), optimum_.x.end(), 0.0);
             optimum_.x = reset_transform_variables(optimum_.x);
             optimum_.y = transform_objectives(optimum_.y);
+        }
+
+        void set_distortion(double distortion) override
+        {
+            this->distortion_ = distortion;
+        }
+
+        void set_distortion_probability(double distortion_probability) override
+        {
+            assert(distortion_probability_ >= 0.0 && distortion_probability_ <= 1.0 && "Distortion probability must be between 0 and 1");
+            this->distortion_probability_ = distortion_probability;
         }
     };
 }

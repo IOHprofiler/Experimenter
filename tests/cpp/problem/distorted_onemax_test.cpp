@@ -35,7 +35,9 @@ std::string vec_to_string(const std::vector<int>& vec) {
 void run_test_case(int instance, int n_variables, double distortion_probability, double distortion, const std::vector<int>& x) {
 
     const auto &problem_factory = ioh::problem::ProblemRegistry<ioh::problem::distorted_onemax::DistortedOnemaxInherited>::instance();
-    auto landscape = problem_factory.create(999'999, 1, n_variables, distortion, distortion_probability);
+    auto landscape = problem_factory.create("DistortedOnemax", 1, n_variables);
+    landscape->set_distortion(distortion);
+    landscape->set_distortion_probability(distortion_probability);
 
     for (int i = 0; i < 5; ++i) {
         std::vector<int> test_vector = x;
