@@ -6,18 +6,29 @@ import ioh
 
 print('  DistortedOnemax:')
 
-f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
-f.set_distortion(1000)
-f.set_distortion_probability(0.9)
+f = ioh.problem.DistortedOnemax(-1, 5, 1000, 0.9)
 x = [0, 1, 1, 1, 0]
 y = f(x)
 print(x, "->", y)
-
-x = [0, 1, 1, 1, 0]
 y = f(x)
 print(x, "->", y)
 
-f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
+f = ioh.problem.DistortedOnemax(
+  instance = 1,
+  n_variables = 5,
+  distortion = 1000,
+  distortion_probability = 0.9,
+)
+x = [0, 1, 1, 1, 0]
+y = f(x)
+print(x, "->", y)
+y = f(x)
+print(x, "->", y)
+
+f = ioh.problem.DistortedOnemax(
+  instance = 1,
+  n_variables = 5,
+)
 x = [1, 1, 1, 1, 0]
 y = f(x)
 print(x, "->", y)

@@ -64,15 +64,16 @@ namespace ioh::problem::distorted_onemax
             optimum_.y = transform_objectives(optimum_.y);
         }
 
-        void set_distortion(double distortion) override
+        DistortedOnemax(const int instance, const int n_variables, const double distortion, const double distortion_probability) :
+            DistortedOnemaxInheritedProblem(instance, n_variables),
+            distortion_(distortion),
+            distortion_distribution_(distortion_probability),
+            rng_(instance)
         {
-            this->distortion_ = distortion;
-        }
-
-        void set_distortion_probability(double distortion_probability) override
-        {
-            assert(distortion_probability >= 0.0 && distortion_probability <= 1.0 && "Distortion probability must be between 0 and 1");
-            this->distortion_distribution_ = std::bernoulli_distribution(distortion_probability);
+            optimum_.x = std::vector<int>(n_variables, 1);
+            optimum_.y = std::accumulate(optimum_.x.begin(), optimum_.x.end(), 0.0);
+            optimum_.x = reset_transform_variables(optimum_.x);
+            optimum_.y = transform_objectives(optimum_.y);
         }
     };
 }

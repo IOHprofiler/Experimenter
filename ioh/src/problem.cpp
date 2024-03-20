@@ -1155,67 +1155,6 @@ void define_cec2022_problems(py::module &m)
         .def(py::init<int, int>(), py::arg("instance"), py::arg("n_variables"));
 }
 
-void define_distorted_onemax(py::module &m)
-{
-    py::class_<ioh::problem::distorted_onemax::DistortedOnemax, IntegerSingleObjective, std::shared_ptr<ioh::problem::distorted_onemax::DistortedOnemax>>
-    (
-        m,
-        "DistortedOnemax",
-        R"pbdoc(
-            Dynamic BinVal. Details: https://link.springer.com/article/10.1007/s42979-022-01203-z
-        )pbdoc"
-    )
-    .def_static(
-        "create",
-        [](const std::string &name, int iid, int dim) {
-            return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().create(name, iid, dim);
-        },
-        py::arg("problem_name"), py::arg("instance_id"), py::arg("n_variables"),
-        R"pbdoc(
-            Create a problem instance
-
-            Parameters
-            ----------
-                problem_name: str
-                    a string indicating the problem name.
-                instance_id: int
-                    an integer identifier of the problem instance
-                n_variables: int
-                    the n_variablesality of the search space
-        )pbdoc"
-    )
-    .def_static(
-        "create",
-        [](int id, int iid, int dim) {
-            return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().create(id, iid, dim);
-        },
-        py::arg("problem_id"), py::arg("instance_id"), py::arg("n_variables"),
-        R"pbdoc(
-            Create a problem instance
-
-            Parameters
-            ----------
-                problem_id: int
-                    a number indicating the problem numeric identifier.
-                instance_id: int
-                    an integer identifier of the problem instance
-                n_variables: int
-                    the dimensionality of the search space
-        )pbdoc"
-    )
-    .def_property_readonly_static(
-        "problems", [](py::object) { return ioh::common::Factory<ioh::problem::distorted_onemax::DistortedOnemax, int, int>::instance().map(); },
-        "All registered problems"
-    )
-    .def(
-        py::init<int, int>(),
-        py::arg("instance_id"),
-        py::arg("n_variables")
-    )
-    .def("set_distortion", &ioh::problem::distorted_onemax::DistortedOnemax::set_distortion, py::arg("distortion"), "set the distortion")
-    .def("set_distortion_probability", &ioh::problem::distorted_onemax::DistortedOnemax::set_distortion_probability, py::arg("distortion_probability"), "set the distortion_probability");
-}
-
 void define_problem_bases(py::module &m)
 {
     define_base_class<RealSingleObjective, double>(m, "RealSingleObjective");
@@ -1672,7 +1611,6 @@ void define_problem(py::module &m)
     define_pbo_problems(m);
     define_cec2013_problems(m);
     define_cec2022_problems(m);
-    define_distorted_onemax(m);
     define_wmodels(m);
     define_submodular_problems(m);
     define_star_discrepancy_problems(m);
@@ -1688,6 +1626,26 @@ void define_problem(py::module &m)
         .def_property_readonly("scale_factors", &ioh::problem::bbob::ManyAffine::get_scale_factors)
         .def_property_readonly("sub_problems", &ioh::problem::bbob::ManyAffine::get_problems)
         .def_property_readonly("function_values", &ioh::problem::bbob::ManyAffine::get_function_values);
+
+    py::class_<
+        ioh::problem::distorted_onemax::DistortedOnemax,
+        ioh::problem::IntegerSingleObjective,
+        std::shared_ptr<ioh::problem::distorted_onemax::DistortedOnemax>>(
+            m,
+            "DistortedOnemax"
+        )
+    .def(
+        py::init<int, int>(),
+        py::arg("instance"),
+        py::arg("n_variables")
+    )
+    .def(
+        py::init<int, int, double, double>(),
+        py::arg("instance"),
+        py::arg("n_variables"),
+        py::arg("distortion"),
+        py::arg("distortion_probability")
+    );
 
     py::module_::import("atexit").attr("register")(py::cpp_function([]() {
         // std::cout << "exiting gracefully...";

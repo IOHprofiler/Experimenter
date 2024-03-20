@@ -59,9 +59,6 @@ namespace ioh::problem::distorted_onemax
             )
         {
         }
-
-        virtual void set_distortion(double distortion) = 0;
-        virtual void set_distortion_probability(double distortion_probability) = 0;
     };
 
     /**
