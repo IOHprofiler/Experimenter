@@ -1,12 +1,24 @@
-from ioh import get_problem, ProblemClass
+# Move the current directory from the beginning to the end of sys.path
+import sys
+if sys.path[0] == '': sys.path.append(sys.path.pop(0))
+
+import ioh
 
 print('DistortedOnemax ===============================================================')
 
-print('instance 1 ===============================================================')
+f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
+print(ioh.problem.IntegerSingleObjective.problems)
+f.set_distortion(1000)
+x = [0, 1, 1, 1, 0]
+y = f(x)
+print(x, "->", y)
 
-f1 = get_problem("DistortedOnemax", 1, 5, ProblemClass.INTEGER)
-x1 = [0, 1, 1, 1, 0]
-y1 = f1(x1)
-print()
-print(x1)
-print(y1)
+f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
+x = [0, 1, 1, 1, 0]
+y = f(x)
+print(x, "->", y)
+
+f = ioh.get_problem("DistortedOnemax", 1, 5, ioh.ProblemClass.INTEGER)
+x = [1, 1, 1, 1, 0]
+y = f(x)
+print(x, "->", y)

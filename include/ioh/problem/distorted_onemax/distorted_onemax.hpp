@@ -12,7 +12,6 @@ namespace ioh::problem::distorted_onemax
     protected:
 
         double distortion_;
-        double distortion_probability_;
         std::bernoulli_distribution distortion_distribution_;  // Bernoulli distribution for distortion
         std::mt19937 rng_;  // Random number generator
 
@@ -56,7 +55,6 @@ namespace ioh::problem::distorted_onemax
         DistortedOnemax(const int instance, const int n_variables) :
             DistortedOnemaxInheritedProblem(instance, n_variables),
             distortion_(0),
-            distortion_probability_(0),
             distortion_distribution_(0)
         {
             std::random_device rd;
@@ -75,8 +73,8 @@ namespace ioh::problem::distorted_onemax
 
         void set_distortion_probability(double distortion_probability) override
         {
-            assert(distortion_probability_ >= 0.0 && distortion_probability_ <= 1.0 && "Distortion probability must be between 0 and 1");
-            this->distortion_probability_ = distortion_probability;
+            assert(distortion_probability >= 0.0 && distortion_probability <= 1.0 && "Distortion probability must be between 0 and 1");
+            this->distortion_distribution_ = std::bernoulli_distribution(distortion_probability);
         }
     };
 }

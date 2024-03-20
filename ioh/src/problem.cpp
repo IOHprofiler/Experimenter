@@ -1212,8 +1212,8 @@ void define_distorted_onemax(py::module &m)
         py::arg("instance_id"),
         py::arg("n_variables")
     )
-    .def("set_distortion", &ioh::problem::distorted_onemax::DistortedOnemaxInherited::set_distortion, py::arg("distortion"), "set the distortion")
-    .def("set_distortion_probability", &ioh::problem::distorted_onemax::DistortedOnemaxInherited::set_distortion_probability, py::arg("distortion_probability"), "set the distortion_probability");
+    .def("set_distortion", &ioh::problem::distorted_onemax::DistortedOnemax::set_distortion, py::arg("distortion"), "set the distortion")
+    .def("set_distortion_probability", &ioh::problem::distorted_onemax::DistortedOnemax::set_distortion_probability, py::arg("distortion_probability"), "set the distortion_probability");
 }
 
 void define_problem_bases(py::module &m)
