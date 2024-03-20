@@ -55,12 +55,10 @@ namespace ioh::problem::distorted_onemax
         DistortedOnemax(const int instance, const int n_variables) :
             DistortedOnemaxInheritedProblem(instance, n_variables),
             distortion_(0),
-            distortion_distribution_(0)
+            distortion_distribution_(0),
+            rng_(instance)
         {
-            std::random_device rd;
-            rng_ = std::mt19937(rd());
-
-            optimum_.x = std::vector<int>(n_variables,1);
+            optimum_.x = std::vector<int>(n_variables, 1);
             optimum_.y = std::accumulate(optimum_.x.begin(), optimum_.x.end(), 0.0);
             optimum_.x = reset_transform_variables(optimum_.x);
             optimum_.y = transform_objectives(optimum_.y);

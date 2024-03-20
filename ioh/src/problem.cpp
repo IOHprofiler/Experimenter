@@ -1672,6 +1672,7 @@ void define_problem(py::module &m)
     define_pbo_problems(m);
     define_cec2013_problems(m);
     define_cec2022_problems(m);
+    define_distorted_onemax(m);
     define_wmodels(m);
     define_submodular_problems(m);
     define_star_discrepancy_problems(m);
